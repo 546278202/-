@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>个人设置</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<!--<link rel="shortcut icon" href="/favicon.ico">-->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<!--ui包-->
+	<link rel="stylesheet" href="../../../css/sm.css">
+	<link rel="stylesheet" href="../../../css/layout.css">
+</head>
+<body>
+	<div class="page-group">
+		<div class="page page-current" id="set">
+
+			<div class="content native-scroll">
+				<div class="content-block-title">家长信息</div>
+				<div class="list-block">
+					<ul>
+						<li class="item-content item-link" id="toEditName">
+							<div class="item-inner">
+								<div class="item-title">用户姓名</div>
+								<div class="item-after" id="userName"></div>
+							</div>
+						</li>
+						<li class="item-content " >
+							<div class="item-inner" >
+								<div class="item-title">手机号</div>
+								<div class="item-after" id="userMob"></div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="content-block-title">学生信息</div>
+				<div class="list-block" id="childrens">
+					<ul>
+					<!--	<li class="item-content item-link toDetail">
+							<div class="item-inner">
+								<div class="item-title">金杨茗多</div>
+								<div class="item-after" id="userName"></div>
+							</div>
+						</li>
+						<li class="item-content item-link toDetail">
+							<div class="item-inner">
+								<div class="item-title">金杨铭泽</div>
+								<div class="item-after" id="userbirthday"></div>
+							</div>
+						</li>-->
+					</ul>
+				</div>
+				<div class="content-block-title">其他操作</div>
+				<div class="list-block">
+					<ul>
+						<li class="item-content item-link" id="resetPSW">
+							<div class="item-inner">
+								<div class="item-title">设置密码</div>
+								<div class="item-after" ></div>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<div class="content-block-title" style="padding:1rem .75rem;">为保证正常接收校方通知，请务必填写真实资料。</div>
+				<div class="content-block">
+					<a href="tel:4006610016" class="button button-fill external" id="quit"><span class="icon icon-phone" style="margin-right: .5rem"></span>联系客服</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!--修改家长姓名-->
+	<div class="page" id='editName'>
+		<div class="content">
+			<div class="content-block-title">修改姓名</div>
+			<div class="list-block">
+				<ul>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">家长姓名</div>
+								<div class="item-input">
+									<input type="tel" placeholder="请输入您的姓名" id="mobFmob" name="mobile">
+								</div>
+							</div>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+			<div class="content-block">
+				<a href="javascript:void(0)" class="button button-fill external" id="quit">保存修改</a>
+				<a class="button close-popup back"  style="margin-top:1rem">返回</a>
+			</div>
+		</div>
+	</div>
+	<!-- 修改家长姓名 End-->
+
+	<!--修改与孩子关系-->
+	<div class="page" id='studentDetail'>
+		<div class="content">
+			<div class="content-block-title">学生信息</div>
+			<div class="list-block">
+				<ul>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">头像</div>
+								<div class=" " >
+									 <img src="../../../images/sng.png" height="60" id="nowsHead">
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content">
+							<div class="item-inner">
+								<div class="item-title label">姓名</div>
+								<div class="item-after" id="nowsName">
+
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content" style="background: #fff;">
+							<div class="item-inner">
+								<div class="item-title label">班级</div>
+								<div class="item-after" id="nowsClass">
+
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="item-content  item-link" style="overflow: hidden">
+							<div class="item-inner">
+								<div class="item-title label">亲子关系</div>
+								<div class="item-input  item-after" id="nowsRelation">
+									<input type="text" placeholder="选择亲子关系" id="picker" readonly="" value="" style="text-align:right;width: 70%;
+    margin-top: -.46rem;">
+								</div>
+							</div>
+						</div>
+					</li>
+
+
+
+				</ul>
+			</div>
+			<div class="content-block">
+				<!--<a href="javascript:void(0)" class="button button-fill external" id="editSinfo">保存</a>-->
+				<a class="button close-popup back"  style="margin-top:1rem">返回</a>
+			</div>
+		</div>
+	</div>
+	<!-- 修改与孩子关系 End-->
+
+</body>
+</html>
+<script src='../../../js/zepto.min.js'></script>
+<script src='../../../js/sm.min.js'></script>
+<script src='../../../js/config.js'></script>
+<script>
+
+
+
+$(function () {
+    "use strict";
+//家长信息
+    var obj=JSON.parse(sessionStorage.baseUser).orguser;
+
+    $("#userName").text(obj.parent.parent_name);
+    $("#userMob").text(obj.user_mobile);
+
+    //孩子信息
+    //获取登陆者孩子信息
+    var studentObj=obj.childrens;
+
+    if(studentObj.length>0){
+        var studentHtml="";
+
+        for(var i=0;i<studentObj.length;i++ ){
+
+            studentHtml+='<li class="item-content item-link toDetail" id="'+studentObj[i].stud_id+'">' +
+							'<div class="item-inner">' +
+								'<div class="item-title">'+studentObj[i].stud_name+'</div>' +
+								'<div class="item-after" id="userName"></div>' +
+							'</div>' +
+						'</li>';
+            if(studentObj[i].headurl!==null && studentObj[i].headurl!==""){
+                $("#userImg img").attr("src",studentObj[i].headurl);
+            }
+
+        }
+        $("#childrens").html(studentHtml);
+    }/*else{
+
+    }*/
+
+    //编辑家长姓名
+   /* $("#toEditName").click(function(){
+        $.router.loadPage("#editName");
+    });*/
+    //编辑孩子信息
+    $(".toDetail").click(function(){
+        var nowId=$(this).attr("id");
+        for(var i=0;i<studentObj.length;i++ ){
+            if(nowId==studentObj[i].stud_id){
+                $("#headurl").attr("src",studentObj[i].headurl);
+                $("#nowsName").html(studentObj[i].stud_name);
+                $("#nowsClass").html(studentObj[i].classList[0].clas_name);
+                //$("#nowsRelation input") data-picker-value
+                $("#nowsRelation input").val(studentObj[i].relation_name);
+            }
+        }
+
+        //从新选择亲子关系
+  /*      $("#picker").picker({
+            toolbarTemplate: '<header class="bar bar-nav">\
+	  <button class="button button-link pull-right close-picker">确定</button>\
+	  <h1 class="title">选择亲子关系</h1>\
+	  </header>',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: ['父亲', '母亲', '爷爷', '奶奶', '外公', '外婆', '其他']
+                }
+            ]
+        });*/
+
+        $.router.loadPage("#studentDetail");
+    });
+
+    //重置密码
+    $("#resetPSW").click(function(){
+         window.location="../login/forgotPSW.html"
+    });
+
+    //修改孩子信息
+/*     $("#editSinfo").click(function(){
+        var parameter={
+            id:"",
+            images:"",
+            relational:"",
+		    org_id:167,
+            identity:1,
+            openid:"o6r0ewm0ljQGfQWwFu9p3L7arfXs",
+            version:3
+		};
+        $.router.loadPage("#editName");
+    }); */
+
+    $(".back").click(function(){
+        $.router.back()
+    });
+
+})
+
+</script>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>个人主页</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<!--ui包-->
+	<link rel="stylesheet" href="/shijiwxy/weixin/css/sm.css">
+	<link rel="stylesheet" href="/shijiwxy/weixin/css/layout.css">
+		<style type="text/css">
+	 a {color:#3d4145}
+	</style>
+	<script type="text/javascript">
+        //html root的字体计算应该放在最前面，这样计算就不会有误差了/
+        var _htmlFontSize = (function(){
+            var clientWidth = document.documentElement ? document.documentElement.clientWidth : document.body.clientWidth;
+            if(clientWidth > 640) clientWidth = 640;
+            document.documentElement.style.fontSize = clientWidth * 1/16+"px";
+            return clientWidth * 1/16;
+        })();
+	</script>
+</head>
+<body>
+<div class="page-group">
+	<div class="page page-current" id="personCenter">
+		<div class="content native-scroll">
+			<div class="banner">
+				<div class="allChildSign" id="childrensLength">
+					<ul></ul>
+				</div>
+
+				<div class="toChangeChild" id="toChangeChild">切换孩子</div>
+				<!--<span></span>-->
+				<div class="user">
+					<div class="userobj userImg" id="userImg"><img src="/shijiwxy/weixin/images/defaultHead.jpg"></div>
+
+					<div class="userobj userInfo">
+						<div class="usserName" id="userName"></div>
+						<div class="userId" id="userId">id:<i style="font-style:normal"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="allServer">
+				<ul>
+				  <li>
+					  <a href="/shijiwxy/weixin/html/parent/notice/index.html" class="external" >
+						<span class="icon icon_notice"></span>
+						<span class="serverText">校园通知</span>
+					  </a>
+				  </li>
+					<li>
+						<a href="/shijiwxy/weixin/html/parent/homework/index.html" class="external" >
+							<span class="icon icon_homework"></span>
+							<span class="serverText">作业练习</span>
+						</a>
+					</li>
+					<li>
+						<a href="/shijiwxy/weixin/html/parent/blog/Blog_list.html" class="external" >
+						 <span class="icon icon_blog"></span>
+						 <span class="serverText">班级博客</span>
+						</a>
+					</li>
+					<li>
+						<a href="/shijiwxy/weixin/html/parent/payOnline/index.html" class="external" >
+						<span class="icon icon_pay"></span>
+						<span class="serverText">掌上缴费</span>
+						</a>
+					</li>
+					<li>
+						<a href="/shijiwxy/weixin/html/parent/set/index.html" class="external" >
+						 <span class="icon icon_set"></span>
+						 <span class="serverText">个人设置</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src='/shijiwxy/weixin/js/zepto.min.js'></script>
+<script src='/shijiwxy/weixin/js/sm.min.js'></script>
+<script src='/shijiwxy/weixin/js/config.js'></script>
+<script src='http://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+<script>
+var baseP=getJPermissions(JSON.parse(sessionStorage.baseUser).orguser.org_id);
+wx.config({
+    debug: false,
+    appId: baseP.appId,
+    timestamp: baseP.timestamp,
+    nonceStr: baseP.nonceStr,
+    signature: baseP.signature,
+    jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+        'translateVoice',
+        'startRecord',
+        'stopRecord',
+        'onVoiceRecordEnd',
+        'playVoice',
+        'onVoicePlayEnd',
+        'pauseVoice',
+        'stopVoice',
+        'uploadVoice',
+        'downloadVoice',
+        'chooseImage',
+        'previewImage',
+        'uploadImage',
+        'downloadImage',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'closeWindow',
+        'scanQRCode',
+        'chooseWXPay',
+        'openProductSpecificView',
+    ]
+});
+wx.ready(function (){
+	//隐藏非基础类菜单
+	wx.hideAllNonBaseMenuItem();
+})
+</script>
+<script>
+
+$(function(){
+	//如果从通过微信消息模板登录
+    if(sessionStorage.baseUser==undefined){
+        var nowOrg_id=baseParameter.org_id;
+        var nowOpenid=baseParameter.openid;
+
+        var parameter={
+            openid:nowOpenid,
+            identity:0,
+            org_id:nowOrg_id,
+            version:3
+        }
+        getData(domainName+"/esb/api/wxredirect",parameter,function(res){
+            if(res.code==200 && res.success==true){
+            	sessionStorage.baseUser=JSON.stringify(res.data);
+                showUser();
+            }else{
+                $.alert(res.message);
+            }
+        });
+    }else{
+        showUser();
+    }
+})
+
+function showUser(){
+		//获取登陆者孩子信息
+		var studentObj=JSON.parse(sessionStorage.baseUser).orguser.childrens;
+		if(studentObj.length==null){
+			$.alert("没有学生信息,请更新学生信息");
+			$("#toChangeChild").hide();
+	        $("#childrensLength ul").hide();
+	        $("a").attr("href","javascript:void(0)");
+			return false
+		}
+
+		if(studentObj.length>0){
+            var studentHtml="";
+            for(var i=0;i<studentObj.length;i++ ){
+            	if(sessionStorage.nowChild!==undefined){
+            		 if(studentObj[i].stud_id==parseInt(sessionStorage.nowChild)){
+                         studentHtml+='<li class="icon_child icon_active" id="'+studentObj[i].stud_id+'"></li>';
+                         $("#userName").html(studentObj[i].stud_name);
+                         $("#userId i").html(studentObj[i].user_id);
+                         sessionStorage.nowChild=studentObj[i].stud_id;
+                         sessionStorage.nowStudent=JSON.stringify(studentObj[i]);
+
+                     }else{
+                         studentHtml+='<li class="icon_child" id="'+studentObj[i].stud_id+'"></li>';
+     				}
+
+     				/*if(studentObj[i].headurl!==null && studentObj[i].headurl!==""){
+                         $("#userImg img").attr("src",studentObj[i].headurl);
+     				}*/
+
+            	}else{
+            	    if(i==0){
+                        studentHtml+='<li class="icon_child icon_active" id="'+studentObj[i].stud_id+'"></li>';
+
+                        $("#userName").html(studentObj[i].stud_name);
+                        $("#userId i").html(studentObj[i].user_id);
+
+                        sessionStorage.nowChild=studentObj[i].stud_id;
+                        sessionStorage.nowStudent=JSON.stringify(studentObj[i]);
+
+                    }else{
+                        studentHtml+='<li class="icon_child" id="'+studentObj[i].stud_id+'"></li>';
+    				}
+
+    				if(studentObj[i].headurl!==null && studentObj[i].headurl!==""){
+                        $("#userImg img").attr("src",studentObj[i].headurl);
+    				}
+            	}
+            }
+            $("#childrensLength ul").append(studentHtml);
+        }
+
+        if(studentObj.length==1){
+           $("#toChangeChild").hide();
+           $("#childrensLength ul").hide()
+		}
+
+		//切换孩子
+		$("#toChangeChild").click(function(){
+            //如果多个孩子则循环查看··
+            var nowIndex=$("#childrensLength ul li.icon_active").next().index()>=0?$("#childrensLength ul li.icon_active").next().index():0;
+            $("#childrensLength ul li.icon_active").removeClass("icon_active");
+            $("#childrensLength ul li").eq(nowIndex).addClass("icon_active");
+            sessionStorage.nowChild=$("#childrensLength ul li").eq(nowIndex).attr("id");
+
+            for(var i=0;i<studentObj.length;i++ ){
+                if(studentObj[i].stud_id==sessionStorage.nowChild){
+					$("#userName").html(studentObj[i].stud_name);
+					$("#userId i").html(studentObj[i].stud_id);
+					if(studentObj[i].headurl!==null && studentObj[i].headurl!==""){
+                        $("#userImg img").attr("src",studentObj[i].headurl);
+    				}
+					sessionStorage.nowChild=studentObj[i].stud_id;
+                    sessionStorage.nowStudent=JSON.stringify(studentObj[i]);
+                }
+            }
+
+		})
+	}
+</script>

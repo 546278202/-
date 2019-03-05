@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>个人主页</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<!--ui包-->
+	<link rel="stylesheet" href="../../../css/sm.css">
+	<link rel="stylesheet" href="../../../css/layout.css">
+	<style type="text/css">
+	 a {color:#3d4145}
+	 .userInfo .usserName {
+		 color: #fff;
+		 font-size: .82rem;
+		 font-weight: bolder;
+		 text-shadow: none;
+	 }
+	 .userInfo .userId {
+		 text-transform: uppercase;
+		 font-size: .72rem;
+		 color: #fff;
+		 font-weight: bolder;
+		 line-height: 1.6rem;
+		 text-shadow: none
+	 }
+	</style>
+	<script type="text/javascript">
+        //html root的字体计算应该放在最前面，这样计算就不会有误差了/
+        var _htmlFontSize = (function(){
+            var clientWidth = document.documentElement ? document.documentElement.clientWidth : document.body.clientWidth;
+            if(clientWidth > 640) clientWidth = 640;
+            document.documentElement.style.fontSize = clientWidth * 1/16+"px";
+            return clientWidth * 1/16;
+        })();
+	</script>
+</head>
+<body>
+<div class="page-group">
+	<div class="page page-current" id="personCenter">
+        <div class="content native-scroll">
+		<div class="banner bannerTeacher">
+			<div class="user userTeacher">
+				<div class="userobj userImg" id="userImg" ><img src="../../../images/defaultHead.jpg"></div>
+
+				<div class="userobj userInfo">
+					<div class="usserName" id="userName"></div>
+					<div class="userId" id="userId">id:<i></i></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="allServer allserverTeacher">
+			<ul>
+				<li id="notice">
+					<a href="../../../html/teacher/notice/notice.html" class="external" id="notice">
+						<span class="icon icon_notice"></span>
+						<span class="serverText">校园通知</span>
+					</a>
+				</li>
+				<li id="tNotice">
+					<a href="../../../html/teacher/tNotice/listAll.html" class="external" >
+						<span class="icon icon_schoolNotice"></span>
+						<span class="serverText">教师通知</span>
+					</a>
+				</li>
+				<li id="homework">
+					<a href="../../../html/teacher/homework/index.html" class="external" >
+					<span class="icon icon_homework"></span>
+					<span class="serverText">作业练习</span>
+					</a>
+				</li>
+				<li id="timeSheet" style="display: none">
+					<a href="../../../html/teacher/timeSheet/index.html" class="external">
+						<span class="icon icon_timeSheet"></span>
+						<span class="serverText">学生考勤</span>
+					</a>
+				</li>
+				<li id="blog">
+                    <a href="../../../html/teacher/blog/Class_list.html" class="external"  >
+                        <span class="icon icon_blog"></span>
+                        <span class="serverText">班级博客</span>
+                    </a>
+				</li>
+				<li>
+					<a href="../../../html/teacher/phonebook/index.html" class="external" >
+					<span class="icon icon_contact"></span>
+					<span class="serverText">通讯联络</span>
+					</a>
+				</li>
+				<li id="pay">
+					<a href="../../../html/teacher/payOnline/index.html" class="external" >
+						<span class="icon icon_payDetail"></span>
+						<span class="serverText">交费管理</span>
+					</a>
+				</li>
+				<li id="wage">
+					<a href="../../../html/teacher/wages/index.html" class="external" >
+					    <span class="icon icon_wages"></span>
+						<span class="serverText">工资查询</span>
+					</a>
+				</li>
+				<li id="echart" style="display: none">
+				    <a href="../../../html/teacher/echart/index.html" class="external" >
+						<span class="icon icon_echart"></span>
+						<span class="serverText">校园统计</span>
+					</a>
+				</li>
+				<li id="set">
+					<a href="../../../html/teacher/set/index.html" class="external" >
+					    <span class="icon icon_set"></span>
+						<span class="serverText">个人设置</span>
+					</a>
+				</li>
+				<div style="clear:both"></div>
+			</ul>
+		</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src='../../../js/zepto.min.js'></script>
+<script src='../../../js/sm.min.js'></script>
+<script src='../../../js/config.js'></script>
+<script src='http://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+<script>
+var baseP=getJPermissions(JSON.parse(sessionStorage.baseUser).orguser.org_id);
+wx.config({
+    debug: false,
+    appId: baseP.appId,
+    timestamp: baseP.timestamp,
+    nonceStr: baseP.nonceStr,
+    signature: baseP.signature,
+    jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+        'translateVoice',
+        'startRecord',
+        'stopRecord',
+        'onVoiceRecordEnd',
+        'playVoice',
+        'onVoicePlayEnd',
+        'pauseVoice',
+        'stopVoice',
+        'uploadVoice',
+        'downloadVoice',
+        'chooseImage',
+        'previewImage',
+        'uploadImage',
+        'downloadImage',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'closeWindow',
+        'scanQRCode',
+        'chooseWXPay',
+        'openProductSpecificView',
+    ]
+});
+wx.ready(function (){
+	//隐藏非基础类菜单
+	wx.hideAllNonBaseMenuItem();
+})
+</script>
+<script>
+    //后退刷新
+    window.addEventListener('pageshow', function(event) {
+        if(sessionStorage.home==1){
+            sessionStorage.removeItem("home");
+            window.location.reload();
+        }
+    });
+
+    //数据转json格式
+    var localClassJson={};
+    var purview=null;
+    $(function(){
+        //如果从通过微信消息模板登录
+        if(sessionStorage.baseUser==undefined){
+            var nowOrg_id=baseParameter.org_id;
+            var nowIdentity=1;
+            var nowOpenid=baseParameter.openid;
+
+            var parameter={
+                openid:nowOpenid,
+                identity:nowIdentity,
+                org_id:nowOrg_id,
+                version:3
+            }
+            getData(domainName+"/esb/api/wxredirect",parameter,function(res){
+                if(res.code==200 && res.success==true){
+                    sessionStorage.baseUser=JSON.stringify(res.data);
+                  //权限判断
+                    var str=JSON.parse(sessionStorage.baseUser).orguser.rlids;
+                   purview=str.substring(0,str.length-1).split(",");
+
+                    showUser();
+                    toJson()
+
+                }else{
+                    $.alert(res.message);
+                }
+            });
+        }else{
+
+            //权限判断
+            var str=JSON.parse(sessionStorage.baseUser).orguser.rlids;
+            purview=str.substring(0,str.length-1).split(",");
+
+            showUser();
+            toJson();
+        }
+
+    });
+
+    function toJson(){
+
+        if($.inArray("1", purview)>=0||$.inArray("2", purview)>=0||$.inArray("10", purview)>=0){
+            var base=JSON.parse(sessionStorage.baseUser);
+            var parameter={
+                token:base.token,
+                // 登录获得token
+                udid:base.udid,
+                // 登录获得udid
+                version:3,
+                uid:base.orguser.user_id,//base.orguser.teacher.tech_id,
+                org_id:base.orguser.org_id,
+            };
+            getData(domainName+"/esb/api/grade/getGradesAndClas",parameter,function(res){
+            	console.info(res)
+                if(res.code==200 && res.success==true){
+                    sessionStorage.allC=JSON.stringify(res.data);
+                    for(var i=res.data.depData.length-1;i>=0;i--){
+
+                        var obj=res.data.depData[i];
+
+                        localClassJson[obj.grade_id]={};
+                        localClassJson[obj.grade_id]["grade_name"]=obj.grade_name;
+                        localClassJson[obj.grade_id]["classList"]={};//班级信息
+
+                        for(var m=obj.clasList.length-1;m>=0;m--){
+                            var classobj=obj.clasList[m];
+
+
+                            localClassJson[obj.grade_id]["classList"][classobj.clas_id]={};
+                            localClassJson[obj.grade_id]["classList"][classobj.clas_id]["className"]=classobj.clas_name;
+                            localClassJson[obj.grade_id]["classList"][classobj.clas_id]["students"]=[];
+                        }
+
+                        if(i==0){
+                            sessionStorage.allClass=JSON.stringify(localClassJson);
+                        }
+                    }
+
+                }else{
+                    $.alert(res.message);
+                }
+            });
+        }else{
+
+            if(JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapNJ.length>0){
+                HandleData(JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapNJ.length);
+            } else {
+
+              //  if($.inArray("3", purview)>=0&&$.inArray("4", purview)>=0){
+                    //处理本地数据（班主任班级和授课班级）
+                 //   var localClass=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapRK.concat(JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapBZR);
+				//}else{
+                    //处理本地数据（班主任班级和授课班级）
+                   // var localClass=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapRK;
+                //}
+                var localClass=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapRK.concat(JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapBZR);
+
+                for(var i=localClass.length-1;i>=0;i--){
+                    var obj=localClass[i];
+                    var gradeid=obj.grade_id;
+
+                    //判断年级是否存在
+                    if(localClassJson[gradeid]==undefined){
+
+                        localClassJson[obj.grade_id]={};
+                        localClassJson[obj.grade_id]["grade_name"]=obj.grade_name;
+
+                        localClassJson[obj.grade_id]["classList"]={};//班级信息
+                        localClassJson[obj.grade_id]["classList"][obj.clas_id]={};
+                        localClassJson[obj.grade_id]["classList"][obj.clas_id]["className"]=obj.clas_name;
+                        localClassJson[obj.grade_id]["classList"][obj.clas_id]["students"]=[];
+                    }else{
+                        //判断班级是否重复
+                        if(localClassJson[gradeid]["classList"][obj.clas_id]==undefined){
+                            localClassJson[gradeid]["classList"][obj.clas_id]={};
+                            localClassJson[gradeid]["classList"][obj.clas_id]["className"]=obj.clas_name;
+                            localClassJson[gradeid]["classList"][obj.clas_id]["students"]=[];
+                        }
+                    }
+                    if(i==0){
+                        sessionStorage.allClass=JSON.stringify(localClassJson);
+                    }
+                }
+            }
+
+
+         }
+
+
+    }
+
+    function showUser() {
+        var teacher=JSON.parse(sessionStorage.baseUser).orguser.teacher;
+        $("#userName").html(teacher.tech_name);
+        $("#userId i").html(teacher.tech_id);
+       /* if(teacher.headurl!==null && teacher.headurl!==""){
+            $("#userImg img").attr("src",teacher.headurl);
+        }
+*/
+        //权限判断
+
+        //管理员： 管理员(1), 校长(2),分校校长(10), 年级组长(5)
+        //普通：任课教师(3), 班主任(4),
+        //其他：学生组管理员(6), 部门管理员(7), 教师组管理员(8), 功能管理员(9),  财务管理员(17) 财务审核员(18)
+
+        //教师通知
+        if($.inArray("2", purview)>=0||$.inArray("1", purview)>=0||$.inArray("5", purview)>=0||$.inArray("10", purview)>=0){
+            $("#tNotice a").attr("href","../../../html/teacher/tNotice/index.html");
+        }else{
+            $("#tNotice a").attr("href","../../../html/teacher/tNotice/listAll.html");
+        }
+        //通知notice
+        if($.inArray("2", purview)>=0||$.inArray("1", purview)>=0||$.inArray("5", purview)>=0||$.inArray("10", purview)>=0||$.inArray("3", purview)>=0||$.inArray("4", purview)>=0){
+            $("#notice a").attr("href","../../../html/teacher/notice/notice.html");
+        }else{
+            $("#notice").hide();
+        }
+
+        //发布作业 博客
+        if($.inArray("3", purview)>=0||$.inArray("4", purview)>=0){
+            //可以访问
+            $("#homework").show();
+            $("#blog").show();
+        }else{
+            $("#homework").hide();
+            $("#blog").hide();
+        }
+
+
+        //缴费--只有班主任可件
+        if($.inArray("4", purview)<0){
+            $("#pay").hide();
+        }
+
+        //学生考勤
+        if($.inArray("4", purview)<0){
+            $("#timeSheet").hide();
+        }
+		//校园统计
+        if($.inArray("4", purview)<0){
+            $("#echart").hide();
+        }
+
+    }
+
+
+    //递归调用==加载年级班级及处理本机，数组转JSON格式
+    function HandleData(m) {
+        (function loadData(m){
+            var gardeId=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapNJ[m-1].grade_id;
+            var parameter={
+                token:JSON.parse(sessionStorage.baseUser).token,
+                udid:JSON.parse(sessionStorage.baseUser).udid, //最后从cookie里去
+                version:"3",  //终端
+                grade_id:gardeId
+            }
+            localClassJson[gardeId]={};
+            localClassJson[gardeId]["grade_name"]=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapNJ[m-1].grade_name;
+            localClassJson[gardeId]["classList"]={};//班级信息
+
+            getData(domainName+"/esb/api/class/getClassesOfGrade",parameter,function(res){
+                if(res.code==200 && res.success==true){
+                    for(var i=res.data.length-1;i>=0;i--) {
+                        var obj=res.data[i];
+                        //判断班级是否重复
+                        if (localClassJson[gardeId]["classList"][obj.clas_id] == undefined) {
+                            localClassJson[gardeId]["classList"][obj.clas_id] = {};
+                            localClassJson[gardeId]["classList"][obj.clas_id]["className"] = obj.clas_name;
+                            localClassJson[gardeId]["classList"][obj.clas_id]["students"] = [];
+                        }
+                    }
+                    //处理线上班级（年级组长）
+                    if((m-1)>0){
+                        loadData(m-1);
+                    }else{
+
+                        //处理本地数据（班主任班级和授课班级）
+                        /* if($.inArray("3", purview)>=0&&$.inArray("4", purview)>=0){
+                             //处理本地数据（班主任班级和授课班级）
+                             var localClass=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapRK.concat(JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapBZR);
+                         }else if($.inArray("3", purview)>=0){
+                             var localClass=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapRK;
+                         }else{
+                             var localClass=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapBZR;
+                         }*/
+
+                        var localClass=JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapRK.concat(JSON.parse(sessionStorage.baseUser).orguser.identityDatas[0].mapBZR);
+
+
+                        for(var i=localClass.length-1;i>=0;i--){
+                            var obj=localClass[i];
+                            var gradeid=obj.grade_id;
+
+                            //判断年级是否存在
+                            if(localClassJson[gradeid]==undefined){
+
+                                localClassJson[obj.grade_id]={};
+                                localClassJson[obj.grade_id]["grade_name"]=obj.grade_name;
+
+                                localClassJson[obj.grade_id]["classList"]={};//班级信息
+                                localClassJson[obj.grade_id]["classList"][obj.clas_id]={};
+                                localClassJson[obj.grade_id]["classList"][obj.clas_id]["className"]=obj.clas_name;
+                                localClassJson[obj.grade_id]["classList"][obj.clas_id]["students"]=[];
+                            }else{
+                                //判断班级是否重复
+                                if(localClassJson[gradeid]["classList"][obj.clas_id]==undefined){
+                                    localClassJson[gradeid]["classList"][obj.clas_id]={};
+                                    localClassJson[gradeid]["classList"][obj.clas_id]["className"]=obj.clas_name;
+                                    localClassJson[gradeid]["classList"][obj.clas_id]["students"]=[];
+                                }
+                            }
+                            console.info(i)
+
+                        }
+
+                        sessionStorage.allClass=JSON.stringify(localClassJson);
+
+                    }
+                }else{
+                    $.alert(res.message);
+                }
+            },"GET",false);
+        }(m));
+    }
+
+</script>
+<script>
+    var _mtac = {};
+    (function() {
+        var mta = document.createElement("script");
+        mta.src = "http://pingjs.qq.com/h5/stats.js?v2.0.2";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "500592445");
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+    })();
+</script>

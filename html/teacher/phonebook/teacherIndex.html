@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>通讯录</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+		<link rel="shortcut icon" href="/favicon.ico">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<!--ui包-->
+		<link rel="stylesheet" href="../../../css/sm.css">
+		<link rel="stylesheet" href="../../../css/layout.css">
+		<style type="text/css">
+		   .number{
+		    position: absolute;
+		    right: 1.5rem;
+		    top: 1.06rem;
+		   }
+		</style>
+	</head>
+	<body>
+		<div class="page-group">
+			<div class="page page-current">
+	 		<div class="content native-scroll">
+				 <div class="list-block" id="allClass">
+				      <ul style="border-bottom:none">
+				      <!--<div class="noData noData_line"><span class="noData__tips">暂无招生</span></div>-->
+				    </ul>
+				 </div>
+			</div>
+		</div>
+ </div>
+	</body>
+</html>
+<script src='../../../js/zepto.min.js'></script>
+<script src='../../../js/sm.min.js'></script>
+<script src='../../../js/config.js'></script>
+<script src='http://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+<script type="text/javascript">
+var baseP=getJPermissions(JSON.parse(sessionStorage.baseUser).orguser.org_id);
+wx.config({
+    debug: false,
+    appId: baseP.appId,
+    timestamp: baseP.timestamp,
+    nonceStr: baseP.nonceStr,
+    signature: baseP.signature,
+    jsApiList: [
+    ]
+});
+wx.ready(function (){
+    //隐藏非基础类菜单
+    wx.hideAllNonBaseMenuItem();
+})
+</script>
+<script>
+	 $(function(){
+
+		 var ports=domainName+"/esb/api/group/getGroups";
+         var parameter={
+             token:JSON.parse(sessionStorage.baseUser).token,
+             udid:JSON.parse(sessionStorage.baseUser).udid, //最后从cookie里去
+             version:"3",  //终端
+             group_type:2,
+             identity:1,
+             org_id:baseParameter.org_id,
+             openid:baseParameter.openid,
+             version:baseParameter.version
+         }
+	     //显示学期
+	     //发送请求
+		  getData(ports, parameter,function(result){
+              if(result.code==200 && result.success==true){
+						var res = result.data.groupData;
+
+						sessionStorage.phonebook=JSON.stringify(res);
+
+						var html="";
+						if(res.length>0){
+							for(var m=res.length-1;m>=0;m--){
+                                html +='<li id="'+res[m].group_id+'">'+
+											'<a href="list.html?id='+res[m].group_id+'" class="item-link item-content external">'+
+												'<div class="item-inner">'+
+													'<div class="item-title">'+res[m].group_name+'</div>'+
+													'<div class="item-after ">'+(res[m].memberData==null?"0":res[m].memberData.length)+'人</div>'+
+												'</div>'+
+											'</a>'+
+									   '</li>';
+							}
+						$("#allClass ul").append(html);
+				    }
+				}else{
+					$.alert(result.msg);
+				}
+		  });
+
+	 });
+</script>
